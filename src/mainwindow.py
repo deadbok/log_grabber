@@ -10,7 +10,7 @@ Main window.
 import socket
 import sys
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, \
-    QLabel, QLineEdit, QPlainTextEdit, QInputDialog, QMessageBox
+    QLabel, QLineEdit, QPlainTextEdit, QInputDialog, QMessageBox, QTableWidget
 from paramiko.ssh_exception import AuthenticationException, \
     BadHostKeyException
 
@@ -31,24 +31,20 @@ class MainWindow(QWidget):
 
         # Create the labels.
         ip_label = QLabel('Juniper IP address:')
-        file_name_label = QLabel('Configuration file name:')
-        config_label = QLabel('Configuration:')
+        search_pattern_label = QLabel('Search pattern:')
 
         # Create the IP and file name edits.
         self.__ip_edit = QLineEdit()
         # self.ip_edit.setInputMask('000.000.000.000')
         self.__ip_edit.setPlaceholderText('127.0.0.1:22')
-        self.__file_name_edit = QLineEdit()
-        self.__file_name_edit.setPlaceholderText(
-            'Leave empty to only view the config')
+        self.__search_pattern_edit = QLineEdit()
+        self.__search_pattern_edit.setPlaceholderText(
+            'Enter search pattern')
+        self.__log_table = QTableWidget()
 
-        # Create the configuration file view.
-        self.__config_edit = QPlainTextEdit()
-        # Do not allow editing the configuration.
-        self.__config_edit.setReadOnly(True)
 
         # Create the buttons
-        get_button = QPushButton("Get configuration")
+        get_button = QPushButton("Get logs")
         # Connect the get config button to the handler.
         get_button.clicked.connect(self.getConfigClicked)
 
@@ -62,18 +58,14 @@ class MainWindow(QWidget):
 
         # Place the labels in the top row.
         grid.addWidget(ip_label, 0, 0, 1, 1)
-        grid.addWidget(file_name_label, 0, 2, 1, 1)
+        grid.addWidget(search_pattern_label, 0, 2, 1, 1)
 
         # Place the edit fields on the next line.
         grid.addWidget(self.__ip_edit, 1, 0, 1, 2)
-        grid.addWidget(self.__file_name_edit, 1, 2, 1, 4)
+        grid.addWidget(self.__search_pattern_edit, 1, 2, 1, 4)
 
-        # Place the configuration view label on the next line.
-        grid.addWidget(config_label, 2, 0)
-
-        # Place the configuration view.
-        grid.addWidget(self.__config_edit, 3, 0, 1, 6)
-
+        # Add log table to layout
+        grid.addWidget(self.__log_table, 2, 0, 2, 6)
         # Place the buttons at the second row, with some cells between them for
         # spacing.
         grid.addWidget(get_button, 4, 3)
@@ -83,7 +75,7 @@ class MainWindow(QWidget):
         self.setLayout(grid)
 
         # Set title
-        self.setWindowTitle('Juniper configuration snatcher')
+        self.setWindowTitle('Log grabber')
         # Show window
         self.show()
 
