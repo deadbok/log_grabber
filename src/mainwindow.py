@@ -29,6 +29,8 @@ class MainWindow(QWidget):
         # Call the parent constructor.
         super().__init__()
 
+        # Create header labels for the table
+        header_table_labels = ["Time", "Name", "Process", "Event", "Message"]
         # Create the labels.
         ip_label = QLabel('Juniper IP address:')
         search_pattern_label = QLabel('Search pattern:')
@@ -40,8 +42,10 @@ class MainWindow(QWidget):
         self.__search_pattern_edit = QLineEdit()
         self.__search_pattern_edit.setPlaceholderText(
             'Enter search pattern')
-        self.__log_table = QTableWidget()
 
+        # Create log table widget
+        self.__log_table = QTableWidget(1, 5)
+        self.__log_table.setHorizontalHeaderLabels(header_table_labels)
 
         # Create the buttons
         get_button = QPushButton("Get logs")
