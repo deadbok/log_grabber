@@ -11,6 +11,7 @@ import socket
 import sys
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QApplication, \
     QLabel, QLineEdit, QPlainTextEdit, QInputDialog, QMessageBox, QTableWidget
+from PyQt5.QtGui import QStandardItemModel
 from paramiko.ssh_exception import AuthenticationException, \
     BadHostKeyException
 
@@ -44,8 +45,10 @@ class MainWindow(QWidget):
             'Enter search pattern')
 
         # Create log table widget
+        table_model = QStandardItemModel()
+        table_model.setHorizontalHeaderLabels(header_table_labels)
         self.__log_table = QTableWidget(1, 5)
-        self.__log_table.setHorizontalHeaderLabels(header_table_labels)
+        self.__log_table.setModel(table_model)
 
         # Create the buttons
         get_button = QPushButton("Get logs")
